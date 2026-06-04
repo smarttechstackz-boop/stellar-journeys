@@ -20,6 +20,9 @@ import avatar1 from "@/assets/avatar-1.jpg";
 import avatar2 from "@/assets/avatar-2.jpg";
 import avatar3 from "@/assets/avatar-3.jpg";
 
+gsap.registerPlugin(ScrollTrigger);
+
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
