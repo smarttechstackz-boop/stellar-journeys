@@ -5,8 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
-import heroBase from "@/assets/hero-base.mp4.asset.json";
-import heroMid from "@/assets/hero-mid.mp4.asset.json";
+import heroMain from "@/assets/hero-main.mp4.asset.json";
 import destMoon from "@/assets/dest-moon.jpg";
 import destMars from "@/assets/dest-mars.jpg";
 import destJupiter from "@/assets/dest-jupiter.jpg";
