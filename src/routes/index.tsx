@@ -5,8 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
-import heroBase from "@/assets/hero-base.mp4.asset.json";
-import heroMid from "@/assets/hero-mid.mp4.asset.json";
+import heroMain from "@/assets/hero-main.mp4.asset.json";
 import destMoon from "@/assets/dest-moon.jpg";
 import destMars from "@/assets/dest-mars.jpg";
 import destJupiter from "@/assets/dest-jupiter.jpg";
@@ -164,15 +163,13 @@ function Navbar() {
 /* ────────────────────────────────────────────────────────── */
 function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const baseRef = useRef<HTMLVideoElement>(null);
-  const midRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Split-letter reveal
       const letters = headlineRef.current?.querySelectorAll(".ltr");
       if (letters) {
         gsap.from(letters, {
@@ -183,13 +180,8 @@ function Hero() {
       gsap.from(".hero-cta", { scale: 0.9, opacity: 0, duration: 0.7, ease: "power3.out", delay: 0.8, stagger: 0.1 });
       gsap.from(".hero-label", { opacity: 0, y: 10, duration: 0.6, delay: 0.2 });
 
-      // Parallax
-      gsap.to(baseRef.current, {
+      gsap.to(videoRef.current, {
         yPercent: 8, ease: "none",
-        scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: true },
-      });
-      gsap.to(midRef.current, {
-        yPercent: 25, ease: "none",
         scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: true },
       });
       gsap.to(contentRef.current, {
@@ -197,7 +189,6 @@ function Hero() {
         scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: true },
       });
 
-      // Scroll cue fade
       gsap.to(scrollCueRef.current, {
         opacity: 0,
         scrollTrigger: { trigger: heroRef.current, start: "top -80", toggleActions: "play none none reverse" },
@@ -209,75 +200,64 @@ function Hero() {
   const headline = "YOUR NEXT DESTINATION";
   return (
     <section ref={heroRef} id="top" className="relative h-screen w-full overflow-hidden">
-      {/* base video */}
       <video
-        ref={baseRef}
+        ref={videoRef}
         autoPlay muted loop playsInline
         className="absolute inset-0 w-full h-full object-cover z-0"
-        src={heroBase.url}
+        src={heroMain.url}
       />
-      {/* mid video */}
-      <video
-        ref={midRef}
-        autoPlay muted loop playsInline
-        className="absolute inset-0 w-full h-full object-cover z-[1] opacity-25 mix-blend-overlay"
-        style={{ filter: "brightness(0.6) saturate(1.3)" }}
-        src={heroMid.url}
-      />
-      {/* vignette */}
       <div
-        className="absolute inset-0 z-[2]"
+        className="absolute inset-0 z-[1] pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 60%, transparent 30%, var(--background) 100%)",
+            "linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.1) 100%)",
         }}
       />
-      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-background/60 via-transparent to-background" />
-      {/* scanline */}
-      <div className="scanline z-[3]" />
-      {/* content */}
-      <div ref={contentRef} className="relative z-[4] h-full max-w-[1400px] mx-auto px-6 lg:px-10 flex flex-col justify-center">
-        <div className="max-w-[680px]">
-          <div className="hero-label text-[11px] tracking-[0.3em] font-medium mb-6" style={{ color: "var(--secondary)" }}>
-            EARTH IS BORING.
-          </div>
-          <h1
-            ref={headlineRef}
-            className="font-display font-black text-foreground leading-[0.95]"
-            style={{ fontSize: "clamp(52px, 8vw, 96px)", letterSpacing: "-0.02em" }}
-          >
-            {headline.split(" ").map((word, wi) => (
-              <span key={wi} className="inline-block whitespace-nowrap mr-[0.25em]">
-                {word.split("").map((ch, i) => (
-                  <span key={i} className="ltr inline-block">{ch}</span>
-                ))}
-              </span>
-            ))}
-          </h1>
-          <p
-            className="hero-sub font-display font-bold mt-4 text-accent"
-            style={{ fontSize: "clamp(18px, 2.2vw, 26px)" }}
-          >
-            COULD BE SOMEWHERE IN MILKY WAY GALAXY.
-          </p>
-          <p className="hero-sub mt-6 text-foreground/70 text-[15px]">Book your SPACE TOUR with us.</p>
-          <div className="flex flex-wrap gap-4 mt-8">
-            <button className="hero-cta px-7 py-3.5 bg-primary text-foreground font-medium rounded-md text-[14px] hover:shadow-[0_0_30px_var(--primary)] transition-all">
-              Book Your Space Tour
-            </button>
-            <button className="hero-cta px-7 py-3.5 border border-foreground/30 text-foreground rounded-md text-[14px] flex items-center gap-2 hover:border-foreground/70 transition-all">
-              Explore Destinations
-              <span>→</span>
-            </button>
-          </div>
+      <div
+        ref={contentRef}
+        className="relative z-[2] h-full flex flex-col justify-center max-w-full md:max-w-[55%] pl-6 md:pl-[80px] pr-6"
+      >
+        <div className="hero-label text-[11px] tracking-[0.3em] font-medium mb-6 uppercase" style={{ color: "var(--secondary)" }}>
+          EARTH IS BORING.
+        </div>
+        <h1
+          ref={headlineRef}
+          className="font-display font-black text-foreground leading-[0.95]"
+          style={{ fontSize: "clamp(52px, 7vw, 88px)", letterSpacing: "-0.02em", fontWeight: 900 }}
+        >
+          {headline.split(" ").map((word, wi) => (
+            <span key={wi} className="inline-block whitespace-nowrap mr-[0.25em]">
+              {word.split("").map((ch, i) => (
+                <span key={i} className="ltr inline-block">{ch}</span>
+              ))}
+            </span>
+          ))}
+        </h1>
+        <p
+          className="hero-sub font-display mt-4"
+          style={{ fontSize: "clamp(16px, 2vw, 26px)", fontWeight: 700, color: "var(--glow)" }}
+        >
+          COULD BE SOMEWHERE IN MILKY WAY GALAXY.
+        </p>
+        <p className="hero-sub font-body mt-6 text-foreground/70" style={{ fontSize: "16px", fontWeight: 300 }}>
+          Book your SPACE TOUR with us.
+        </p>
+        <div className="flex flex-wrap gap-4 mt-8">
+          <button className="hero-cta px-7 py-3.5 bg-primary text-foreground font-medium rounded-md text-[14px] hover:shadow-[0_0_30px_var(--primary)] transition-all">
+            Book Your Space Tour
+          </button>
+          <button className="hero-cta px-7 py-3.5 border border-foreground/30 text-foreground rounded-md text-[14px] flex items-center gap-2 hover:border-foreground/70 transition-all">
+            Explore Destinations
+            <span>→</span>
+          </button>
         </div>
       </div>
-      {/* scroll cue */}
       <div
         ref={scrollCueRef}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[4] flex flex-col items-center gap-3"
       >
         <div className="w-[22px] h-[36px] border border-foreground/40 rounded-full flex justify-center pt-2">
+
           <motion.div
             className="w-[3px] h-[8px] bg-foreground/80 rounded-full"
             animate={{ y: [0, 12, 0] }}
