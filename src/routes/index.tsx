@@ -220,7 +220,8 @@ function Hero() {
       <video
         ref={midRef}
         autoPlay muted loop playsInline
-        className="absolute inset-0 w-full h-full object-cover z-[1] opacity-55 mix-blend-screen"
+        className="absolute inset-0 w-full h-full object-cover z-[1] opacity-25 mix-blend-overlay"
+        style={{ filter: "brightness(0.6) saturate(1.3)" }}
         src={heroMid.url}
       />
       {/* vignette */}
