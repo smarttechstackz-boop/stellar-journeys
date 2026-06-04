@@ -5,6 +5,8 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 export default defineConfig({
   plugins: [
     tsconfigPaths(),
@@ -12,5 +14,10 @@ export default defineConfig({
     tanstackRouter({ target: "react", autoCodeSplitting: true }),
     tanstackStart({ server: { entry: "server" } }),
     react(),
+    cloudflare({
+      viteEnvironment: {
+        name: "ssr"
+      }
+    })
   ],
 });
