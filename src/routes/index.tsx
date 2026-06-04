@@ -956,7 +956,6 @@ function FooterCTA() {
 function SpaceToursPage() {
   // Register GSAP plugins + Lenis
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
     const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
     const tick = (time: number) => { lenis.raf(time * 1000); };
     gsap.ticker.add(tick);
