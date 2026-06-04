@@ -1,15 +1,31 @@
-## Fix: Register GSAP ScrollTrigger at module scope
+## Goal
+Eject from the Lovable Cloudflare default and force a Vercel-targeted Nitro build.
 
-**File:** `src/routes/index.tsx`
+## Changes
 
-**Change 1** — Add at top of file, immediately after the import block and before any component definition:
+**1. `vite.config.ts`** — add `cloudflare: false` to the wrapper config:
 
 ```ts
-gsap.registerPlugin(ScrollTrigger);
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+
+export default defineConfig({
+  cloudflare: false,
+  tanstackStart: {
+    server: { entry: "server" },
+  },
+});
 ```
 
-**Change 2** — Remove the redundant `gsap.registerPlugin(ScrollTrigger);` call from inside the `SpaceToursPage` `useEffect` at line 956.
+**2. `package.json`** — replace the `build` script to force the Vercel Nitro preset:
 
-No other code is modified — no refs, tweens, components, or styles touched.
+```json
+"build": "NITRO_PRESET=vercel tanstack-start build",
+```
 
-**Why:** Child components' `useLayoutEffect` hooks fire before the parent `SpaceToursPage`'s `useEffect`, so `ScrollTrigger.create(...)` runs before the plugin is registered, throwing `TypeError: _context2 is not a function`. Registering at module scope guarantees the plugin is installed once during module evaluation, before any component lifecycle runs.
+`dev`, `build:dev`, `preview`, `lint`, `format` are untouched.
+
+## Caveats
+- `cloudflare: false` is undocumented in the wrapper; if it's a no-op, the `NITRO_PRESET=vercel` env var on the build script is the real guarantee.
+- `tanstack-start build` must exist as a CLI in `@tanstack/react-start` for the new script to run. If it doesn't resolve, fallback is `NITRO_PRESET=vercel vite build`.
+- Lovable's in-editor preview and `*.lovable.app` publish still run on Cloudflare. This change only affects builds you run yourself (locally or on Vercel CI).
+- `build:dev` still uses `vite build --mode development` — Lovable's internal build pipeline depends on it; do not change.
