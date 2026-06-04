@@ -20,6 +20,9 @@ import avatar1 from "@/assets/avatar-1.jpg";
 import avatar2 from "@/assets/avatar-2.jpg";
 import avatar3 from "@/assets/avatar-3.jpg";
 
+gsap.registerPlugin(ScrollTrigger);
+
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -953,7 +956,6 @@ function FooterCTA() {
 function SpaceToursPage() {
   // Register GSAP plugins + Lenis
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
     const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
     const tick = (time: number) => { lenis.raf(time * 1000); };
     gsap.ticker.add(tick);
